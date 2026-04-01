@@ -28,6 +28,16 @@
         <a href="#">Series</a>
         <a href="#">Movies</a>
       </nav>
+      <div class="auth-section">
+        <button id="loginBtn" class="auth-btn">Sign In</button>
+        <div id="userMenu" class="user-menu" style="display: none;">
+          <div class="user-info">
+            <p id="userEmail"></p>
+            <small id="userRole"></small>
+          </div>
+          <button id="logoutBtn" class="logout-btn">Logout</button>
+        </div>
+      </div>
     </header>
 
     <main>
@@ -148,6 +158,7 @@
     </main>
   </div>
 
+  <script src="auth-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

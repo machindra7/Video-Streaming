@@ -1,3 +1,70 @@
+// ===== Authentication Setup =====
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const userMenu = document.getElementById("userMenu");
+const userEmail = document.getElementById("userEmail");
+const userRole = document.getElementById("userRole");
+
+// Initialize auth UI
+function initAuthUI() {
+  const token = getTokenFromStorage();
+  if (token) {
+    const decoded = decodeToken(token);
+    if (decoded && decoded.email) {
+      showUserMenu(decoded);
+    }
+  }
+}
+
+function showUserMenu(userInfo) {
+  loginBtn.style.display = "none";
+  userMenu.style.display = "block";
+  userEmail.textContent = userInfo.email || "User";
+  
+  const groups = userInfo["cognito:groups"] || [];
+  const role = groups.includes("admin") ? "Admin" : "Viewer";
+  userRole.textContent = role;
+  
+  // Store for later use
+  setUserInfo({ email: userInfo.email, groups, role });
+}
+
+function hideUserMenu() {
+  loginBtn.style.display = "block";
+  userMenu.style.display = "none";
+}
+
+// Login/Logout handlers
+loginBtn?.addEventListener("click", () => {
+  window.location.href = getLoginUrl();
+});
+
+logoutBtn?.addEventListener("click", () => {
+  clearTokens();
+  hideUserMenu();
+  window.location.href = getLogoutUrl();
+});
+
+// Handle OAuth callback
+function handleAuthCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  
+  if (code) {
+    console.log("Authorization code received:", code);
+    // TODO: Exchange code for tokens on your backend
+    // This should be done server-side for security
+    window.location.replace(window.location.origin);
+  }
+}
+
+// Initialize on page load
+document.addEventListener("DOMContentLoaded", () => {
+  handleAuthCallback();
+  initAuthUI();
+});
+
+// ===== Content Carousel & Tabs =====
 const track = document.getElementById("contentTrack");
 const prevButton = document.getElementById("prevTrack");
 const nextButton = document.getElementById("nextTrack");
