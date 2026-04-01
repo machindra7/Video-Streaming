@@ -172,6 +172,9 @@ body.locked {
   background: var(--surface);
   backdrop-filter: blur(8px);
   box-shadow: var(--shadow);
+  overflow: visible;
+  position: relative;
+  z-index: 20;
 }
 
 .brand-wrap {
@@ -242,6 +245,7 @@ body.locked {
 
 .auth-section {
   position: relative;
+  z-index: 40;
 }
 
 .auth-btn,
@@ -266,13 +270,13 @@ body.locked {
 .user-menu {
   position: absolute;
   right: 0;
-  top: 110%;
+  top: calc(100% + 10px);
   background: var(--surface-strong);
   border: 1px solid var(--line);
   border-radius: 16px;
   padding: 0.9rem;
   min-width: 200px;
-  z-index: 10;
+  z-index: 100;
   backdrop-filter: blur(8px);
 }
 

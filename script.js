@@ -19,7 +19,7 @@ function initAuthUI() {
   const token = getTokenFromStorage();
   const user = getUserInfo();
 
-  if (token && user?.email) {
+  if (token && user?.username) {
     showUserMenu({
       email: user.email,
       username: user.username,
@@ -33,16 +33,12 @@ function initAuthUI() {
 }
 
 function getDisplayUsername(userInfo) {
-  const explicitUsername = userInfo["cognito:username"] || userInfo.preferred_username || userInfo.username;
+  const explicitUsername = userInfo["cognito:username"] || userInfo.username;
   if (explicitUsername) {
     return explicitUsername;
   }
 
-  if (userInfo.email && userInfo.email.includes("@")) {
-    return userInfo.email.split("@")[0];
-  }
-
-  return "User";
+  return "unknown-user";
 }
 
 function showUserMenu(userInfo) {
@@ -118,16 +114,37 @@ if (signinBtn) {
 
 // Handle OAuth callback
 function handleAuthCallback() {
-  const params = new URLSearchParams(window.location.search);
-  const code = params.get("code");
-  
-  if (code) {
-    console.log("Authorization code received:", code);
-    // Placeholder session for UI flow until backend token exchange is added.
-    // In production, exchange code server-side and store real tokens.
-    const placeholderToken = ["header", btoa(JSON.stringify({ email: "user@pulseplay.app", "cognito:groups": ["viewer"] })), "signature"].join(".");
-    setTokens(placeholderToken, "placeholder-access-token");
-    setUserInfo({ email: "user@pulseplay.app", groups: ["viewer"], role: "Viewer" });
+  const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+  const queryParams = new URLSearchParams(window.location.search);
+  const idToken = hashParams.get("id_token");
+  const accessToken = hashParams.get("access_token");
+  const oauthError = hashParams.get("error") || queryParams.get("error");
+
+  if (oauthError) {
+    console.error("Cognito auth error:", oauthError, hashParams.get("error_description") || queryParams.get("error_description"));
+    clearTokens();
+    lockApp();
+    return;
+  }
+
+  if (idToken) {
+    const decoded = decodeToken(idToken);
+    if (!decoded || !decoded["cognito:username"]) {
+      clearTokens();
+      lockApp();
+      return;
+    }
+
+    setTokens(idToken, accessToken || "");
+    const groups = decoded["cognito:groups"] || [];
+    const role = groups.includes("admin") ? "Admin" : "Viewer";
+    setUserInfo({
+      username: decoded["cognito:username"],
+      email: decoded.email || "",
+      groups,
+      role
+    });
+
     window.location.replace(window.location.origin);
   }
 }

@@ -8,8 +8,8 @@ const COGNITO_CONFIG = {
   domain: 'us-east-2tm6qsmtam',  // Domain prefix only, not full URL
   redirectSignIn: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   redirectSignOut: 'https://master.dbl2qallvsphe.amplifyapp.com/',
-  responseType: 'code',
-  scope: ['openid', 'email']
+  responseType: 'token',
+  scope: ['openid', 'email', 'profile']
 };
 
 const getCognitoDomain = () => `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
