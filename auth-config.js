@@ -8,18 +8,29 @@ const COGNITO_CONFIG = {
   domain: 'us-east-2tm6qsmtam',  // Domain prefix only, not full URL
   redirectSignIn: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   redirectSignOut: 'https://master.dbl2qallvsphe.amplifyapp.com/',
-  responseType: 'token',
+  responseType: 'id_token token',
   scope: ['openid', 'email', 'profile']
 };
 
 const getCognitoDomain = () => `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
 
-const buildAuthParams = () => new URLSearchParams({
-  client_id: COGNITO_CONFIG.clientId,
-  response_type: COGNITO_CONFIG.responseType,
-  scope: COGNITO_CONFIG.scope.join(' '),
-  redirect_uri: COGNITO_CONFIG.redirectSignIn
-});
+const createRandomParam = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+const buildAuthParams = () => {
+  const state = createRandomParam();
+  const nonce = createRandomParam();
+  sessionStorage.setItem('oauth_state', state);
+  sessionStorage.setItem('oauth_nonce', nonce);
+
+  return new URLSearchParams({
+    client_id: COGNITO_CONFIG.clientId,
+    response_type: COGNITO_CONFIG.responseType,
+    scope: COGNITO_CONFIG.scope.join(' '),
+    redirect_uri: COGNITO_CONFIG.redirectSignIn,
+    state,
+    nonce
+  });
+};
 
 // Managed login URLs
 const getLoginUrl = () => {
