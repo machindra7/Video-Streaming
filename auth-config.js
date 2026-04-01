@@ -9,30 +9,35 @@ const COGNITO_CONFIG = {
   redirectSignIn: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   redirectSignOut: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   responseType: 'code',
-  scope: ['email', 'openid', 'profile']
+  scope: ['openid', 'email']
 };
 
-// OAuth URLs
+const getCognitoDomain = () => `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
+
+const buildAuthParams = () => new URLSearchParams({
+  client_id: COGNITO_CONFIG.clientId,
+  response_type: COGNITO_CONFIG.responseType,
+  scope: COGNITO_CONFIG.scope.join(' '),
+  redirect_uri: COGNITO_CONFIG.redirectSignIn
+});
+
+// Managed login URLs
 const getLoginUrl = () => {
-  const params = new URLSearchParams({
-    client_id: COGNITO_CONFIG.clientId,
-    response_type: COGNITO_CONFIG.responseType,
-    scope: COGNITO_CONFIG.scope.join(' '),
-    redirect_uri: COGNITO_CONFIG.redirectSignIn
-  });
-  const domain = `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
-  return `https://${domain}/oauth2/authorize?${params.toString()}`;
+  const params = buildAuthParams();
+  return `https://${getCognitoDomain()}/login?${params.toString()}`;
 };
 
-const getSignupUrl = () => `${getLoginUrl()}&prompt=login`;
+const getSignupUrl = () => {
+  const params = buildAuthParams();
+  return `https://${getCognitoDomain()}/signup?${params.toString()}`;
+};
 
 const getLogoutUrl = () => {
   const params = new URLSearchParams({
     client_id: COGNITO_CONFIG.clientId,
     logout_uri: COGNITO_CONFIG.redirectSignOut
   });
-  const domain = `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
-  return `https://${domain}/logout?${params.toString()}`;
+  return `https://${getCognitoDomain()}/logout?${params.toString()}`;
 };
 
 // Token management
