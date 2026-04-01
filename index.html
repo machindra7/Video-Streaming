@@ -10,11 +10,25 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div id="authGate" class="auth-gate">
+    <div class="auth-gate-card">
+      <p class="auth-kicker">Welcome to PulsePlay</p>
+      <h2>Sign up to start streaming</h2>
+      <p class="auth-copy">
+        Create your account to unlock movies, watchlists, and personalized recommendations.
+      </p>
+      <div class="auth-gate-actions">
+        <button id="signupBtn" class="auth-primary">Sign Up</button>
+        <button id="signinBtn" class="auth-secondary">Sign In</button>
+      </div>
+    </div>
+  </div>
+
   <div class="bg-layer bg-grid"></div>
   <div class="bg-layer bg-glow bg-glow-a"></div>
   <div class="bg-layer bg-glow bg-glow-b"></div>
 
-  <div class="app-shell">
+  <div class="app-shell" id="appShell" aria-hidden="true">
     <header class="topbar reveal">
       <div class="brand-wrap">
         <div class="logo-badge">PP</div>
@@ -29,7 +43,7 @@
         <a href="#">Movies</a>
       </nav>
       <div class="auth-section">
-        <button id="loginBtn" class="auth-btn">Sign In</button>
+        <button id="loginBtn" class="auth-btn" style="display: none;">Sign In</button>
         <div id="userMenu" class="user-menu" style="display: none;">
           <div class="user-info">
             <p id="userEmail"></p>

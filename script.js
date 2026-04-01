@@ -6,6 +6,10 @@ const logoutBtn = document.getElementById("logoutBtn");
 const userMenu = document.getElementById("userMenu");
 const userEmail = document.getElementById("userEmail");
 const userRole = document.getElementById("userRole");
+const authGate = document.getElementById("authGate");
+const appShell = document.getElementById("appShell");
+const signupBtn = document.getElementById("signupBtn");
+const signinBtn = document.getElementById("signinBtn");
 
 // Debug logging
 console.log("Auth Elements Found:", { loginBtn: !!loginBtn, logoutBtn: !!logoutBtn, userMenu: !!userMenu });
@@ -13,11 +17,13 @@ console.log("Auth Elements Found:", { loginBtn: !!loginBtn, logoutBtn: !!logoutB
 // Initialize auth UI
 function initAuthUI() {
   const token = getTokenFromStorage();
-  if (token) {
-    const decoded = decodeToken(token);
-    if (decoded && decoded.email) {
-      showUserMenu(decoded);
-    }
+  const user = getUserInfo();
+
+  if (token && user?.email) {
+    showUserMenu({ email: user.email, "cognito:groups": user.groups || [] });
+    unlockApp();
+  } else {
+    lockApp();
   }
 }
 
@@ -39,6 +45,20 @@ function hideUserMenu() {
   userMenu.style.display = "none";
 }
 
+function lockApp() {
+  document.body.classList.add("locked");
+  appShell.classList.add("gated");
+  appShell.setAttribute("aria-hidden", "true");
+  authGate.classList.remove("hidden");
+}
+
+function unlockApp() {
+  document.body.classList.remove("locked");
+  appShell.classList.remove("gated");
+  appShell.setAttribute("aria-hidden", "false");
+  authGate.classList.add("hidden");
+}
+
 // Login/Logout handlers
 if (loginBtn) {
   loginBtn.addEventListener("click", () => {
@@ -54,8 +74,25 @@ if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     clearTokens();
     hideUserMenu();
+    lockApp();
     const url = getLogoutUrl();
     console.log("Redirecting to logout URL:", url);
+    window.location.href = url;
+  });
+}
+
+if (signupBtn) {
+  signupBtn.addEventListener("click", () => {
+    const url = getSignupUrl();
+    console.log("Redirecting to sign up URL:", url);
+    window.location.href = url;
+  });
+}
+
+if (signinBtn) {
+  signinBtn.addEventListener("click", () => {
+    const url = getLoginUrl();
+    console.log("Redirecting to sign in URL:", url);
     window.location.href = url;
   });
 }
@@ -67,8 +104,11 @@ function handleAuthCallback() {
   
   if (code) {
     console.log("Authorization code received:", code);
-    // TODO: Exchange code for tokens on your backend
-    // This should be done server-side for security
+    // Placeholder session for UI flow until backend token exchange is added.
+    // In production, exchange code server-side and store real tokens.
+    const placeholderToken = ["header", btoa(JSON.stringify({ email: "user@pulseplay.app", "cognito:groups": ["viewer"] })), "signature"].join(".");
+    setTokens(placeholderToken, "placeholder-access-token");
+    setUserInfo({ email: "user@pulseplay.app", groups: ["viewer"], role: "Viewer" });
     window.location.replace(window.location.origin);
   }
 }

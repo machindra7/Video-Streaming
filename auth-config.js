@@ -24,6 +24,8 @@ const getLoginUrl = () => {
   return `https://${domain}/oauth2/authorize?${params.toString()}`;
 };
 
+const getSignupUrl = () => `${getLoginUrl()}&prompt=login`;
+
 const getLogoutUrl = () => {
   const params = new URLSearchParams({
     client_id: COGNITO_CONFIG.clientId,
