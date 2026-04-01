@@ -20,24 +20,43 @@ function initAuthUI() {
   const user = getUserInfo();
 
   if (token && user?.email) {
-    showUserMenu({ email: user.email, "cognito:groups": user.groups || [] });
+    showUserMenu({
+      email: user.email,
+      username: user.username,
+      "cognito:username": user.username,
+      "cognito:groups": user.groups || []
+    });
     unlockApp();
   } else {
     lockApp();
   }
 }
 
+function getDisplayUsername(userInfo) {
+  const explicitUsername = userInfo["cognito:username"] || userInfo.preferred_username || userInfo.username;
+  if (explicitUsername) {
+    return explicitUsername;
+  }
+
+  if (userInfo.email && userInfo.email.includes("@")) {
+    return userInfo.email.split("@")[0];
+  }
+
+  return "User";
+}
+
 function showUserMenu(userInfo) {
   loginBtn.style.display = "none";
   userMenu.style.display = "block";
-  userEmail.textContent = userInfo.email || "User";
+  const username = getDisplayUsername(userInfo);
+  userEmail.textContent = username;
   
   const groups = userInfo["cognito:groups"] || [];
   const role = groups.includes("admin") ? "Admin" : "Viewer";
   userRole.textContent = role;
   
   // Store for later use
-  setUserInfo({ email: userInfo.email, groups, role });
+  setUserInfo({ email: userInfo.email, username, groups, role });
 }
 
 function hideUserMenu() {
