@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulsePlay Streaming</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-layer bg-grid"></div>
+  <div class="bg-layer bg-glow bg-glow-a"></div>
+  <div class="bg-layer bg-glow bg-glow-b"></div>
+
+  <div class="app-shell">
+    <header class="topbar reveal">
+      <div class="brand-wrap">
+        <div class="logo-badge">PP</div>
+        <div>
+          <h1 class="brand">PulsePlay</h1>
+          <p class="brand-sub">Cinematic Streaming</p>
+        </div>
+      </div>
+      <nav class="top-nav">
+        <a href="#">Home</a>
+        <a href="#">Series</a>
+        <a href="#">Movies</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero reveal reveal-delay-1">
+        <div class="hero-content">
+          <p class="kicker">Tonight's Pick</p>
+          <h2>Neon Tides</h2>
+          <p class="hero-copy">
+            In a flooded megacity, a rogue diver hunts for memory cores that can rewrite history.
+            Stream in 4K Dolby Vision with synchronized watch parties.
+          </p>
+          <div class="hero-actions">
+            <button class="play-btn">Play Now</button>
+            <button class="ghost-btn">+ Watchlist</button>
+          </div>
+          <div class="meta-row">
+            <span>2026</span>
+            <span>Sci-Fi</span>
+            <span>2h 11m</span>
+            <span class="rating">9.3</span>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-poster-card">
+            <div class="poster-overlay"></div>
+            <p class="poster-title">NEON TIDES</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-head reveal reveal-delay-2">
+        <h3>Trending Right Now</h3>
+        <div class="slider-controls">
+          <button id="prevTrack" aria-label="Previous">&#8592;</button>
+          <button id="nextTrack" aria-label="Next">&#8594;</button>
+        </div>
+      </section>
+
+      <section class="track-wrap reveal reveal-delay-2">
+        <div class="track" id="contentTrack">
+          <article class="show-card" data-genre="sci-fi">
+            <div class="thumb thumb-a"></div>
+            <div class="show-meta">
+              <h4>Arclight District</h4>
+              <p>Cyberpunk Thriller</p>
+            </div>
+          </article>
+          <article class="show-card" data-genre="drama">
+            <div class="thumb thumb-b"></div>
+            <div class="show-meta">
+              <h4>River of Glass</h4>
+              <p>Emotional Drama</p>
+            </div>
+          </article>
+          <article class="show-card" data-genre="fantasy">
+            <div class="thumb thumb-c"></div>
+            <div class="show-meta">
+              <h4>Moon Archive</h4>
+              <p>Fantasy Epic</p>
+            </div>
+          </article>
+          <article class="show-card" data-genre="crime">
+            <div class="thumb thumb-d"></div>
+            <div class="show-meta">
+              <h4>Blue Velvet Code</h4>
+              <p>Crime Mystery</p>
+            </div>
+          </article>
+          <article class="show-card" data-genre="action">
+            <div class="thumb thumb-e"></div>
+            <div class="show-meta">
+              <h4>Velocity IX</h4>
+              <p>Action Adventure</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel-grid reveal reveal-delay-3">
+        <section class="panel panel-tabs">
+          <div class="panel-header">
+            <h3>Curated For You</h3>
+            <div class="tab-list" role="tablist">
+              <button class="tab active" data-tab="all">All</button>
+              <button class="tab" data-tab="sci-fi">Sci-Fi</button>
+              <button class="tab" data-tab="drama">Drama</button>
+              <button class="tab" data-tab="action">Action</button>
+            </div>
+          </div>
+          <div id="tabResults" class="mini-list"></div>
+        </section>
+
+        <aside class="panel panel-watchlist">
+          <div class="panel-header">
+            <h3>Your Watchlist</h3>
+            <span class="badge" id="watchCount">2</span>
+          </div>
+          <ul class="watchlist" id="watchlist">
+            <li>
+              <span>Neon Tides</span>
+              <button class="watch-toggle active" aria-label="In watchlist"></button>
+            </li>
+            <li>
+              <span>Arclight District</span>
+              <button class="watch-toggle active" aria-label="In watchlist"></button>
+            </li>
+            <li>
+              <span>River of Glass</span>
+              <button class="watch-toggle" aria-label="Not in watchlist"></button>
+            </li>
+            <li>
+              <span>Velocity IX</span>
+              <button class="watch-toggle" aria-label="Not in watchlist"></button>
+            </li>
+          </ul>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
