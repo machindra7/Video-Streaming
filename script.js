@@ -1,9 +1,14 @@
 // ===== Authentication Setup =====
+console.log("script.js loaded");
+
 const loginBtn = document.getElementById("loginBtn");
 const logoutBtn = document.getElementById("logoutBtn");
 const userMenu = document.getElementById("userMenu");
 const userEmail = document.getElementById("userEmail");
 const userRole = document.getElementById("userRole");
+
+// Debug logging
+console.log("Auth Elements Found:", { loginBtn: !!loginBtn, logoutBtn: !!logoutBtn, userMenu: !!userMenu });
 
 // Initialize auth UI
 function initAuthUI() {
@@ -35,15 +40,25 @@ function hideUserMenu() {
 }
 
 // Login/Logout handlers
-loginBtn?.addEventListener("click", () => {
-  window.location.href = getLoginUrl();
-});
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    const url = getLoginUrl();
+    console.log("Redirecting to login URL:", url);
+    window.location.href = url;
+  });
+} else {
+  console.error("Login button not found!");
+}
 
-logoutBtn?.addEventListener("click", () => {
-  clearTokens();
-  hideUserMenu();
-  window.location.href = getLogoutUrl();
-});
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", () => {
+    clearTokens();
+    hideUserMenu();
+    const url = getLogoutUrl();
+    console.log("Redirecting to logout URL:", url);
+    window.location.href = url;
+  });
+}
 
 // Handle OAuth callback
 function handleAuthCallback() {
@@ -60,6 +75,7 @@ function handleAuthCallback() {
 
 // Initialize on page load
 document.addEventListener("DOMContentLoaded", () => {
+  console.log("Page loaded, initializing auth...");
   handleAuthCallback();
   initAuthUI();
 });

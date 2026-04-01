@@ -1,9 +1,11 @@
 // Cognito Configuration
+console.log("auth-config.js loaded");
+
 const COGNITO_CONFIG = {
   region: 'us-east-2',
   userPoolId: 'us-east-2_tm6qsmTAM',
   clientId: '2pto8560q5teikt564o7q7l9qc',
-  domain: 'us-east-2tm6qsmtam.auth.us-east-2.amazoncognito.com',
+  domain: 'us-east-2tm6qsmtam',  // Domain prefix only, not full URL
   redirectSignIn: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   redirectSignOut: 'https://master.dbl2qallvsphe.amplifyapp.com/',
   responseType: 'code',
@@ -18,7 +20,8 @@ const getLoginUrl = () => {
     scope: COGNITO_CONFIG.scope.join(' '),
     redirect_uri: COGNITO_CONFIG.redirectSignIn
   });
-  return `https://${COGNITO_CONFIG.domain}/oauth2/authorize?${params.toString()}`;
+  const domain = `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
+  return `https://${domain}/oauth2/authorize?${params.toString()}`;
 };
 
 const getLogoutUrl = () => {
@@ -26,7 +29,8 @@ const getLogoutUrl = () => {
     client_id: COGNITO_CONFIG.clientId,
     logout_uri: COGNITO_CONFIG.redirectSignOut
   });
-  return `https://${COGNITO_CONFIG.domain}/logout?${params.toString()}`;
+  const domain = `${COGNITO_CONFIG.domain}.auth.${COGNITO_CONFIG.region}.amazoncognito.com`;
+  return `https://${domain}/logout?${params.toString()}`;
 };
 
 // Token management
